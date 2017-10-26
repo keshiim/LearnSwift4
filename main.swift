@@ -275,3 +275,9 @@ func anyCommonElements<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> T where 
     return result
 }
 
+let π = 3.141592653
+let 你好 = "你好啊swift"
+let 🐂🐶 = "cowdog"
+
+let `let` = "let"
+print(`let`)

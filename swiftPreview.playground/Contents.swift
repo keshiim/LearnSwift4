@@ -599,6 +599,7 @@ func anyCommonElements<T: Sequence, U:Sequence>(_ lhs: T, _ rhs: U) -> Bool wher
     return false
 }
 
-func anyCommonElements<T: Sequence, U:Sequence>(_ lhs: T, _ rhs: U) -> T where T.Iterator.Element: Equatable, T.Iterator.Element == U.Iterator.Element {
-    
-}
+//func anyCommonElements<T: Sequence, U:Sequence>(_ lhs: T, _ rhs: U) -> T where T.Iterator.Element: Equatable, T.Iterator.Element == U.Iterator.Element {
+//
+//}
+
