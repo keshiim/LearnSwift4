@@ -281,3 +281,11 @@ let 🐂🐶 = "cowdog"
 
 let `let` = "let"
 print(`let`)
+
+let greeting = "Guten Tag!"
+print(greeting.startIndex)
+greeting[greeting.startIndex] //G
+greeting[greeting.index(before: greeting.endIndex)] //!
+greeting[greeting.index(after: greeting.startIndex)]//u
+let index = greeting.index(greeting.startIndex, offsetBy: 7)
+greeting[index]
