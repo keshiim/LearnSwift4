@@ -289,3 +289,14 @@ greeting[greeting.index(before: greeting.endIndex)] //!
 greeting[greeting.index(after: greeting.startIndex)]//u
 let index = greeting.index(greeting.startIndex, offsetBy: 7)
 greeting[index]
+
+func greet(person: String) -> String {
+    let greeting = "Hello, " + person + "!"
+    return greeting
+}
+print(greet(person: "zheng"))
+
+func greet(person: String) {
+    print("Hello, \(person)!")
+}
+
