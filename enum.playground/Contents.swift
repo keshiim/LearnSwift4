@@ -112,3 +112,16 @@ func evaluate(_ expression: ArithmeticExpresstion) -> Int {
     }
 }
 print(evaluate(product))
+
+func arrayPairSum(_ nums: [Int]) -> Int {
+    var res = 0
+    let n = nums.count
+    let numsSored = nums.sorted{ $0 < $1 }
+    print(numsSored)
+    for i in stride(from: 0, to: n, by: 2) {
+        res += numsSored[i]
+    }
+    return res
+}
+
+print(arrayPairSum([1, 2, 3, 2]))
