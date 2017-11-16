@@ -300,3 +300,55 @@ func greet(person: String) {
     print("Hello, \(person)!")
 }
 
+
+
+func matrixReshape(_ nums: [[Int]], _ r: Int, _ c: Int) -> [[Int]] {
+    let m = nums.count, n = nums[0].count
+    if (m * n != r * c) { return nums }
+    var res = [[Int]](repeating: [Int](repeating: 0, count: c), count: r)
+    for i in 0..<r {
+        for j in 0..<c {
+            let k = i * c + j
+            res[i][j] = nums[k / n][k % n]
+        }
+    }
+    return res
+}
+func matrixReshape1(_ nums: [[Int]], _ r: Int, _ c: Int) -> [[Int]] {
+    let m = nums.count, n = nums[0].count
+    if (m * n != r * c) { return nums }
+    var res = [[Int]](repeating: [Int](repeating: 0, count: c), count: r)
+    for i in 0..<r*c {
+        res[i / c][i % c] = nums[i / n][i % n]
+    }
+    return res
+}
+print(matrixReshape1([[1, 2], [3, 4]], 1, 4))
+
+func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+    var map: [Int: Int] = [:]
+    for i in 0..<nums.count {
+        map[nums[i]] = i
+    }
+    var res = [Int]()
+    for i in 0..<nums.count {
+        let t = target - nums[i]
+        if let index = map[t], index != i {
+            res.append(i)
+            res.append(index)
+            break;
+        }
+    }
+    return res
+}
+func twoSum1(_ nums: [Int], _ target: Int) -> [Int] {
+    var map: [Int: Int] = [:]
+    for i in 0..<nums.count {
+        if let index = map[target - nums[i]] {
+            return [index, i]
+        }
+        map[nums[i]] = i
+    }
+    return []
+}
+print(twoSum1([2, 7, 11, 15], 9))
