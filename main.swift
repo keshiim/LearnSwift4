@@ -352,3 +352,180 @@ func twoSum1(_ nums: [Int], _ target: Int) -> [Int] {
     return []
 }
 print(twoSum1([2, 7, 11, 15], 9))
+
+func shortestDistance(_ words: [String], word1: String, word2: String) -> Int {
+    var idx1: [Int] = [Int](), idx2 = [Int]()
+    var res = Int.max
+    for i in 0..<words.count {
+        if words[i] == word1 { idx1.append(i) }
+        else if words[i] == word2 { idx2.append(i) }
+    }
+    for i in 0..<idx1.count {
+        for j in 0..<idx2.count {
+            res = min(res, abs(idx1[i] - idx2[j]))
+        }
+    }
+    return res
+}
+print(shortestDistance(["practice", "makes", "perfect", "coding", "makes"], word1: "makes", word2: "coding"))
+
+func shortestDistance1(_ words: [String], word1: String, word2: String) -> Int {
+    var idx1: Int = -1, idx2 = -1
+    var res = Int.max
+    for i in 0..<words.count {
+        if words[i] == word1 { idx1 = i}
+        else if words[i] == word2 { idx2 = i}
+        if idx1 != -1 && idx2 != -1 {
+            res = min(res, abs(idx1 - idx2))
+        }
+    }
+    return res
+}
+print(shortestDistance1(["practice", "makes", "perfect", "coding", "makes"], word1: "coding", word2: "practice"))
+
+func shortestDistance2(_ words: [String], word1: String, word2: String) -> Int {
+    var idx = -1
+    var res = Int.max
+    for i in 0..<words.count {
+        if words[i] == word1 || words[i] == word2 {
+            if idx != -1 && words[i] != words[idx] {
+                res = min(res, abs(i - idx))
+            }
+            idx = i
+        }
+    }
+    return res
+}
+print(shortestDistance2(["practice", "makes", "perfect", "coding", "makes"], word1: "coding", word2: "practice"))
+
+let dirs = [[0, -1], [-1, 0], [0, 1], [1, 0]]
+func maxAreaOfIsland(_ grid: [[Int]]) -> Int {
+    let m = grid.count, n = grid[0].count
+    var grid = grid
+    var res = 0
+    for i in 0..<m {
+        for j in 0..<n {
+            if grid[i][j] != 1 { continue }
+            var cnt = 0
+            helper(&grid, i: i, j: j, cnt: &cnt, res: &res)
+        }
+    }
+    return res
+}
+func helper(_ grid: inout [[Int]], i: Int, j: Int, cnt: inout Int, res: inout Int) {
+    let m = grid.count, n = grid[0].count
+    if i < 0 || i >= m || j < 0 || j >= n || grid[i][j] <= 0 { return }
+    cnt+=1
+    res = max(res, cnt)
+    grid[i][j] *= -1
+    for dir in dirs {
+        helper(&grid, i: i + dir[0], j: j + dir[1], cnt: &cnt, res: &res)
+    }
+}
+print(maxAreaOfIsland([[1,1,0,0,0],[1,1,0,0,0],[0,0,0,1,1],[0,0,0,1,1]]));
+
+
+func findDisappearedNumbers(_ nums: [Int]) -> [Int] {
+    var res: [Int] = [Int]()
+    var nums = nums
+    for i in 0..<nums.count {
+        let idx = abs(nums[i]) - 1
+        nums[idx] = (nums[idx] > 0) ? -nums[idx] : nums[idx]
+    }
+    for i in 0..<nums.count {
+        if nums[i] > 0 {
+            res.append(i + 1)
+        }
+    }
+    return res
+}
+print(findDisappearedNumbers([4,3,2,7,8,2,3,1]))
+
+func findDisappearedNumbers1(_ nums: [Int]) -> [Int] {
+    var res = [Int]()
+    var nums = nums
+    var i = 0
+    while i < nums.count {
+        if nums[i] != nums[nums[i] - 1] {
+            nums.swapAt(i, nums[i] - 1);
+        } else {
+            i += 1;
+        }
+    }
+    
+    for i in 0..<nums.count {
+        if nums[i] != i + 1 {
+            res.append(i + 1)
+        }
+    }
+    return res
+}
+print(findDisappearedNumbers1([4,3,2,7,8,2,3,1]))
+
+func findDisappearedNumbers2(_ nums: [Int]) -> [Int] {
+    var res = [Int]()
+    var nums = nums
+    let n = nums.count
+    for i in 0..<nums.count {
+        let idx = nums[i] - 1
+        nums[idx % n] += n
+    }
+    for i in 0..<n {
+        if nums[i] <= n {
+            res.append(i + 1)
+        }
+    }
+    return res
+}
+print(findDisappearedNumbers2([4,3,2,7,8,2,3,1]))
+
+func isOneBitCharacter(_ bits: [Int]) -> Bool {
+    let n = bits.count
+    var i = 0
+    while i < n - 1 {
+        i += bits[i] + 1
+    }
+    return  i == n - 1
+}
+print(isOneBitCharacter([1,1,1,0]))
+
+func isOneBitCharacter1(_ bits: [Int]) -> Bool {
+    if bits.isEmpty { return false }
+    if bits.count == 1 { return bits[0] == 0 }
+    var t = Array<Int>()
+    if bits[0] == 0 {
+        t = Array(bits[1..<bits.endIndex])
+    } else if bits[0] == 1 {
+        t = Array(bits[2..<bits.endIndex])
+    }
+    return isOneBitCharacter1(t)
+}
+print(isOneBitCharacter1([1,1,0,0]))
+
+func isOneBitCharacter2(_ bits: [Int]) -> Bool {
+    return helper(bits, idx: 0)
+}
+func helper(_ bits: [Int], idx: Int) -> Bool {
+    let n = bits.count
+    if idx == n { return false }
+    if idx == n - 1 { return bits[idx] == 0 }
+    if (bits[idx] == 0) { return helper(bits, idx: idx + 1) }
+    return helper(bits, idx: idx + 2)
+}
+print(isOneBitCharacter2([1,1,0,0]))
+
+var nums = [2, 1]
+func moveZeros(_ nums: inout [Int]) {
+    var i = 0, j = 0
+    while i < nums.count {
+        if nums[i] != 0 {
+            if  i != j  {
+                nums.swapAt(i, j)
+            }
+            j += 1
+        }
+        i += 1
+    }
+}
+moveZeros(&nums)
+print(nums)
