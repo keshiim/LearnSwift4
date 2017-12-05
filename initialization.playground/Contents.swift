@@ -288,4 +288,7 @@ struct Chessboard {
     func squareIsBlackAt(row: Int, column: Int) -> Bool {
         return boardColors[(row * 8) + column]
     }
+    deinit {
+        
+    }
 }
