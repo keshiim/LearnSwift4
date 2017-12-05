@@ -529,3 +529,211 @@ func moveZeros(_ nums: inout [Int]) {
 }
 moveZeros(&nums)
 print(nums)
+
+func maxProfit(_ prices: [Int]) -> Int {
+    var res = 0, buy = Int.max
+    for price in prices {
+        buy = min(buy, price)
+        res = max(res, price - buy)
+    }
+    return res
+}
+print(maxProfit([7, 1, 5, 3, 6, 4]))
+print(maxProfit([7, 6, 4, 3, 1]))
+
+func maxProfit1(_ prices: [Int]) -> Int {
+    var res = 0, i = 0
+    let n = prices.count
+    while i < n - 1 {
+        if prices[i] < prices[i + 1] {
+           res += prices[i + 1] - prices[i]
+        }
+        i += 1
+    }
+    return res
+}
+print(maxProfit1([3, 2, 3, 5, 3, 6]))
+
+func maxProfit2(_ prices: [Int]) -> Int {
+    if prices.count == 0 {
+        return 0
+    }
+    let n = prices.count
+    var g = [[Int]](repeating: [Int](repeatElement(0, count: 3)), count: n)
+    var l = [[Int]](repeating: [Int](repeatElement(0, count: 3)), count: n)
+    for i in 1..<n {
+        let diff = prices[i] - prices[i - 1]
+        for j in 1...2 {
+            l[i][j] = max(g[i - 1][j - 1] + max(diff, 0), l[i - 1][j] + diff)
+            g[i][j] = max(l[i][j], g[i - 1][j])
+        }
+    }
+    print(g)
+    return g[n - 1][2]
+}
+print(maxProfit2([3,2,6,5,0,3]))
+
+
+func maxProfit22(_ prices: [Int]) -> Int {
+    var buy1 = Int.min, buy2 = Int.min
+    var  sell1 = 0, sell2 = 0
+    for price in prices {
+        sell2 = max(sell2, buy2 + price)
+        buy2 = max(buy2, sell1 - price)
+        sell1 = max(sell1, buy1 + price)
+        buy1 = max(buy1, -price)
+    }
+    return sell2;
+}
+
+func maxProfit(_ k: Int, _ prices: [Int]) -> Int {
+    if prices.isEmpty {
+        return 0
+    }
+    if prices.count <= k {
+        return solveMaxProfit(prices)
+    }
+    var g = [Int](repeatElement(0, count: k + 1))
+    var l = [Int](repeatElement(0, count: k + 1))
+    for i in 0..<prices.count - 1 {
+        let diff = prices[i + 1] - prices[i]
+        var j = k
+        while (j >= 1) {
+            l[j] = max(g[j - 1] + max(0, diff), l[j] + diff)
+            g[j] = max(l[j], g[j])
+            j -= 1
+        }
+    }
+    return g[k]
+}
+func solveMaxProfit(_ prices: [Int]) -> Int {
+    var res = 0
+    for i in 1..<prices.count {
+        if prices[i] - prices[i - 1] > 0 {
+            res += prices[i] - prices[i - 1]
+        }
+    }
+    return res
+}
+print(maxProfit(2, [6,1,3,2,4,7]))
+
+func maxProfit4(_ prices: [Int]) -> Int {
+    var pre_buy = 0, buy = Int.min, pre_sell = 0, sell = 0
+    for price in prices {
+        pre_buy = buy
+        buy = max(pre_sell - price, pre_buy)
+        pre_sell = sell
+        sell = max(pre_buy + price, pre_sell)
+    }
+    return sell
+}
+print(maxProfit4([6,1,3,2,4,7]))
+
+
+func merge(_ nums1: inout [Int], _ m: Int, _ nums2: [Int], _ n: Int) {
+    if m <= 0 && n <= 0 {
+        return
+    }
+    var a = 0, b = 0
+    var merged = [Int](repeatElement(0, count: m + n))
+    for i in 0..<m + n {
+        if a < m && b < n {
+            //都有数据
+            if nums1[a] < nums2[b] {
+                merged[i] = nums1[a];
+                a += 1
+            } else {
+                merged[i] = nums2[b]
+                b += 1
+            }
+        } else if a < m && b >= n {
+            // nums2 耗尽
+            merged[i] = nums1[a]
+            a += 1
+        } else if a >= m && b < n {
+            // nums1 耗尽
+            merged[i] = nums2[b]
+            b += 1
+        } else  {
+            return
+        }
+    }
+    for i in 0..<m + n {
+        nums1[i] = merged[i]
+    }
+}
+var nums1 = [1, 2, 4, 5, 6, 0]
+merge(&nums1, 5, [3], 1)
+print(nums1)
+
+
+func merge1(_ nums1: inout [Int], _ m: Int, _ nums2: [Int], _ n: Int) {
+    var count = m + n - 1
+    var m = m - 1
+    var n = n - 1
+    while m >= 0 && n >= 0 {
+        if nums1[m] > nums2[n] {
+            nums1[count] = nums1[m];
+            m -= 1
+        } else {
+            nums1[count] = nums2[n]
+            n -= 1
+        }
+        count -= 1
+    }
+    while n >= 0 {
+        nums1[count] = nums2[n]
+        count -= 1
+        n -= 1
+    }
+}
+var nums11 = [1]
+merge1(&nums11, 1, [0], 0)
+print(nums11)
+
+func findShortestSubArray(_ nums: [Int]) -> Int {
+    let n = nums.count
+    var degree = 0, res = Int.max
+    var m = [Int: Int]()
+    var pos = [Int: [Int]]()
+    for i in 0..<n {
+        let num = nums[i]
+        let count = (m[num] ?? 0) + 1 //次数累加
+        m[num] = count
+        if count == 1 {
+            //说明第一次记录
+            pos[num] = [i, i]
+        } else {
+            let position = pos[num]
+            pos[num] = [(position?.first)!, i];
+        }
+        degree = max(degree, count)
+    }
+    for (num, count) in m {
+        if count == degree {
+            res = min(res, (pos[num]?.last)! - (pos[num]?.first)! + 1)
+        }
+    }
+    return res
+}
+print(findShortestSubArray([1,2,2,3,1,4,2]))
+
+func findShortestSubArray1(_ nums: [Int]) -> Int {
+    let n = nums.count
+    var res = Int.max, degree = 0
+    var m = [Int: Int](), startIdx = [Int: Int]()
+    for i in 0..<n {
+        m[nums[i]] = (m[nums[i]] ?? 0) + 1 //先设置出现次数
+        if startIdx[nums[i]] == nil {
+            startIdx[nums[i]] = i  //设置初始位置
+        }
+        if m[nums[i]] == degree {
+            res = min(res, i - startIdx[nums[i]]! + 1)
+        } else if m[nums[i]]! > degree {
+            res = i - startIdx[nums[i]]! + 1
+            degree = m[nums[i]]!
+        }
+    }
+    return res
+}
+print(findShortestSubArray1([1,2,2,3,1,4,2]))
