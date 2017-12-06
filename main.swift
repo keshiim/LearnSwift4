@@ -737,3 +737,44 @@ func findShortestSubArray1(_ nums: [Int]) -> Int {
     return res
 }
 print(findShortestSubArray1([1,2,2,3,1,4,2]))
+
+func findLengthOfLCIS(_ nums: [Int]) -> Int {
+    
+    var res = 0, cnt = 0, pre = Int.max
+    for num in nums {
+        if pre < num { cnt += 1 }
+        else { cnt = 1 }
+        res = max(res, cnt)
+        pre = num
+    }
+    return res
+}
+print(findLengthOfLCIS([1,3,5,4,7]))
+
+func findNumberOfLIS1(_ nums: [Int]) -> Int {
+    if nums.isEmpty {
+        return 0
+    }
+    var maxLen = 1, res = 0
+    let n = nums.count
+    var len = [Int](repeating: 1, count: n)
+    var cnt = [Int](repeating: 1, count: n)
+    for i in 1..<n {
+        for j in 0..<i {
+            if nums[j] < nums[i] {
+                if len[j] + 1 > len[i] {
+                    len[i] = len[j] + 1
+                    cnt[i] = cnt[j]
+                } else if len[j] + 1 == len[i] {
+                    cnt[i] += cnt[j]
+                }
+            }
+        }
+        maxLen = max(maxLen, len[i])
+    }
+    for i in 0..<n {
+        if maxLen == len[i] { res += cnt[i] }
+    }
+    return res
+}
+print(findNumberOfLIS1([]))
