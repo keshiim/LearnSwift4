@@ -778,3 +778,21 @@ func findNumberOfLIS1(_ nums: [Int]) -> Int {
     return res
 }
 print(findNumberOfLIS1([]))
+
+func removeDuplicates(_ nums: inout [Int]) -> Int {
+    if nums.isEmpty { return 0 }
+    var pre = 0, cur = 0
+    let n = nums.count
+    while cur < n {
+        if nums[pre] == nums[cur] { cur += 1 }
+        else {
+            pre += 1
+            nums[pre] = nums[cur]
+            cur += 1
+        }
+    }
+    return pre + 1
+}
+var removeDuplicatesArray = [1,1,2]
+print("length: \(removeDuplicates(&removeDuplicatesArray)) of \(removeDuplicatesArray)")
+
